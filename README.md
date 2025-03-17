@@ -25,6 +25,7 @@ Each BTB entry contains:
 - **Prediction Bits:** A 2-bit counter representing the branch history.
 
 The stucture of each entry in the btb is shown below:
+
 ![Entry Structure](pics/structure.png)
 
 ### 2. 2-Bit Branch Predictor
@@ -35,11 +36,11 @@ The **2-bit saturating counter** helps determine whether a branch should be take
 - **11 (Strongly Taken)** → Predict Taken
 
 The 2-Bit Branch Predictor is shown below:
-![2-Bit Branch Predictor](pics/predictor.png)
+<img src="pics/predictor.png" width="400" />
 
 The predictor is implemented as an FSM using the following set of combinational logic:
-![FSM Logic](pics/fsm.png)
 
+<img src="pics/fsm.png" width="400" />
 
 ### 3. BTB Lookup & Update Mechanism
 - On **instruction fetch**, the BTB is checked for a matching entry.
