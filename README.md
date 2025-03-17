@@ -76,7 +76,7 @@ If the PC value from IF stage and updatePC value from EX stage are same indicati
 3. **Run tests:**
    ```sh
    sbt test
-   ```]
+   ```
 
 ## Future Enhancements
 - Increase associativity (e.g., 4-way or fully associative BTB).
