@@ -18,10 +18,14 @@ The BTB is structured as a **2-way set-associative cache**, meaning each index c
 - If a match is found (**hit**), it retrieves the predicted target address.
 - If no match is found (**miss**), it fetches the branch target from memory and updates the BTB.
 
+There is an internal module that has a set of registers along with muxes to read and write data to the btb. Then there is seperate logic attached to this block to extract all required data from our extracted data from btb. The btb internal module is shown below:
+
+<img src="pics/btbfile.png" width="500" />
+
 Each BTB entry contains:
+- **Valid Bit:** Indicates if the entry contains valid data.
 - **Tag:** The upper bits of the branch instruction address.
 - **Target Address:** The address to jump to if the branch is taken.
-- **Valid Bit:** Indicates if the entry contains valid data.
 - **Prediction Bits:** A 2-bit counter representing the branch history.
 
 The stucture of each entry in the btb is shown below:
@@ -36,11 +40,12 @@ The **2-bit saturating counter** helps determine whether a branch should be take
 - **11 (Strongly Taken)** → Predict Taken
 
 The 2-Bit Branch Predictor is shown below:
+
 <img src="pics/predictor.png" width="400" />
 
 The predictor is implemented as an FSM using the following set of combinational logic:
 
-<img src="pics/fsm.png" width="400" />
+<img src="pics/fsm.png" width="250" />
 
 ### 3. BTB Lookup & Update Mechanism
 - On **instruction fetch**, the BTB is checked for a matching entry.
@@ -50,6 +55,13 @@ The predictor is implemented as an FSM using the following set of combinational 
 - When the branch is resolved:
   - The BTB and predictor update their state based on actual execution.
   - If mispredicted, the pipeline is flushed and corrected.
+
+### 4. Track history in set
+- A Least Recently Used (LRU) scheme is used to keep track of latest accessed branch within a set.
+- It is implemented as a register of 8 bits where 0 indicated Branch1 was recently accessed and 1 indicating Branch2 was accessed.
+
+### 5. Forwarding
+If the PC value from IF stage and updatePC value from EX stage are same indicating an update to PC being fetched, there is support to pass the updated prediction directly instead of the need to wait 1 clock cycle.
 
 ## Usage
 1. **Clone the repository:**
